@@ -10,24 +10,20 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::Result;
 use time::PreciseTime;
+use std::io::{stdin,stdout,Write};
 
 fn main() -> Result<()> {
-	let start = PreciseTime::now();
+   	let s = menu();
 
+   	let start = PreciseTime::now();
 
     let filename = "foo.txt";
 
     let dict = dicts(filename).unwrap();
 
-    // println!("{:?}", dict);
+    let correction = correction(s, dict);
 
-    // let edit_word = candidates("a".to_string(), 1);
-
-    // println!("{:?}", edit_word);
-
-    let correction = correction("togetherd".to_string(), dict);
-
-    println!("{:?}", correction);
+    println!("Correction: {}",correction);
 
     let end = PreciseTime::now();
 
@@ -36,12 +32,33 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+//print menu
+//from: https://users.rust-lang.org/t/how-to-get-user-input/5176/2
+fn menu() -> String {
+	let mut s=String::new();
+    print!("Word: ");
+    let _=stdout().flush();
+    stdin().read_line(&mut s).expect("Did not enter a correct string");
+    if let Some('\n')=s.chars().next_back() {
+        s.pop();
+    }
+    if let Some('\r')=s.chars().next_back() {
+        s.pop();
+    }
+
+    let s = s.to_lowercase();
+
+    s
+}
+
 //read from big txt and generate a hashmap with all words
 fn dicts(filename: &str) -> Result<HashMap<String, u32>> {
     let mut file = File::open(filename)?;
 
     let mut text = String::new();
     file.read_to_string(&mut text)?;
+
+    let text = text.to_lowercase();
 
     let mut map = HashMap::new();
 
