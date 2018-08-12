@@ -3,22 +3,32 @@
 // Author:      Xuefeng Luo
 //
 // Honor Code:  I pledge that this program represents my own work.
+extern crate time;
 
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::Result;
+use time::PreciseTime;
 
 fn main() -> Result<()> {
+	let start = PreciseTime::now();
+
+
     let filename = "foo1.txt";
 
     let dict = dicts(filename).unwrap();
 
     // println!("{:?}", dict);
 
-    let edit_word = edit("fuck".to_string());
+    let edit_word = candidates("fuc".to_string(), 3);
 
     // println!("{:?}", edit_word);
+
+
+    let end = PreciseTime::now();
+
+    println!("{} seconds", start.to(end));
 
     Ok(())
 }
@@ -100,7 +110,7 @@ fn edit(word: String) -> Vec<String> {
         }
 
         //exchange
-        if (x != 0 && x < length) {
+        if x != 0 && x < length {
             //clone parts
             let mut word_new = word_f.clone();
             let mut word_new_s = word_s.clone();
@@ -120,4 +130,23 @@ fn edit(word: String) -> Vec<String> {
     }
 
     words
+}
+
+
+//do the edit as dim as times
+fn candidates(word: String, dim: u8) -> Vec<String>{
+	// let mut words = Vec::new();
+
+	//initialize the words
+	let mut words = edit(word);
+
+	//redo the edit function
+	for _ in 1..dim {
+		for x in words.clone().iter() {
+			let mut words_new = edit(x.to_string());
+			words.append(&mut words_new);
+		}
+	}
+
+	words
 }
