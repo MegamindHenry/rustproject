@@ -15,16 +15,19 @@ fn main() -> Result<()> {
 	let start = PreciseTime::now();
 
 
-    let filename = "foo1.txt";
+    let filename = "foo.txt";
 
     let dict = dicts(filename).unwrap();
 
     // println!("{:?}", dict);
 
-    let edit_word = candidates("fuc".to_string(), 3);
+    // let edit_word = candidates("a".to_string(), 1);
 
     // println!("{:?}", edit_word);
 
+    let correction = correction("togetherd".to_string(), dict);
+
+    println!("{:?}", correction);
 
     let end = PreciseTime::now();
 
@@ -136,6 +139,7 @@ fn edit(word: String) -> Vec<String> {
 //do the edit as dim as times
 fn candidates(word: String, dim: u8) -> Vec<String>{
 	// let mut words = Vec::new();
+	let word_org = word.clone();
 
 	//initialize the words
 	let mut words = edit(word);
@@ -148,5 +152,39 @@ fn candidates(word: String, dim: u8) -> Vec<String>{
 		}
 	}
 
+	words.push(word_org);
+
 	words
+}
+
+
+//find out he most possible word for correction
+fn correction(word: String, dicts: HashMap<String, u32>) -> String  {
+	//clone word in case of not found
+	let word_org = word.clone();
+
+	//get all candidates
+	let mut words = candidates(word, 2);
+
+	//find out the most common words
+	let mut max = 0;
+	let mut word_max = String::new();
+
+	for x in words.iter() {
+		let y = dicts.get(&x.to_string());
+		if y != None{
+			let z = y.unwrap();
+			if *z > max {
+				max = *z;
+				word_max = x.to_string();
+			}
+		}
+	}
+
+	//assign to original word
+	if word_max == "" {
+		word_max = word_org;
+	}
+
+	word_max
 }
