@@ -12,31 +12,32 @@ use std::io::Result;
 use time::PreciseTime;
 use std::io::{stdin,stdout,Write};
 
-fn main() -> Result<()> {
-   	let s = menu();
+fn main() {
+    loop{
 
-   	let start = PreciseTime::now();
+       	let s = menu();
 
-    let filename = "foo.txt";
+       	let start = PreciseTime::now();
 
-    let dict = dicts(filename).unwrap();
+        let filename = "foo.txt";
 
-    let correction = correction(s, dict);
+        let dict = dicts(filename).unwrap();
 
-    println!("Correction: {}",correction);
+        let correction = correction(s, dict);
 
-    let end = PreciseTime::now();
+        println!("Correction: {}",correction);
 
-    println!("{} seconds", start.to(end));
+        let end = PreciseTime::now();
 
-    Ok(())
+        println!("{} seconds", start.to(end));
+    }
 }
 
 //print menu
 //from: https://users.rust-lang.org/t/how-to-get-user-input/5176/2
 fn menu() -> String {
 	let mut s=String::new();
-    print!("Word: ");
+    print!("Word(Ctrl+C to exit): ");
     let _=stdout().flush();
     stdin().read_line(&mut s).expect("Did not enter a correct string");
     if let Some('\n')=s.chars().next_back() {
@@ -182,30 +183,14 @@ fn candidates(word: String, dim: u8) -> Vec<String>{
 
 //find out he most possible word for correction
 fn correction(word: String, dicts: HashMap<String, u32>) -> String  {
-	//clone word in case of not found
-	let word_original = word.clone();
-
 	//get all candidates
-	let mut words = candidates(word.clone(), 2);
+	let words = candidates(word.clone(), 2);
 
 	//find out the most common words
-	let mut max = 0;
-	let mut word_max = String::new();
-
-	for x in words.iter() {
-		let y = dicts.get(&x.to_string());
-		if y != None{
-			let z = y.unwrap();
-			if *z > max {
-				max = *z;
-				word_max = x.to_string();
-			}
-		}
-	}
-
     let candidates_grade = grade(words, dicts, word.clone());
+    println!("{:?}", candidates_grade);
 
-    word_max = top_grade(candidates_grade);
+    let word_max = top_grade(candidates_grade);
 
 	word_max
 }
@@ -216,7 +201,7 @@ fn grade(words: Vec<String>, dicts: HashMap<String, u32>, word_original: String)
     let mut candidates_grade = HashMap::new();
 
     for x in words.iter() {
-        let mut grade = 0;
+        let mut grade: u32;
 
         let y = dicts.get(&x.to_string());
         if y != None{
