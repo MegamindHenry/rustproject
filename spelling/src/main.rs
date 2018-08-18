@@ -156,7 +156,7 @@ fn edit(word: String) -> Vec<String> {
 //do the edit as dim as times
 fn candidates(word: String, dim: u8) -> Vec<String>{
 	// let mut words = Vec::new();
-	let word_org = word.clone();
+	let word_original = word.clone();
 
 	//initialize the words
 	let mut words = edit(word);
@@ -169,7 +169,12 @@ fn candidates(word: String, dim: u8) -> Vec<String>{
 		}
 	}
 
-	words.push(word_org);
+	words.push(word_original);
+
+    //delete duplicates
+    words.sort();
+
+    words.dedup();
 
 	words
 }
@@ -178,10 +183,10 @@ fn candidates(word: String, dim: u8) -> Vec<String>{
 //find out he most possible word for correction
 fn correction(word: String, dicts: HashMap<String, u32>) -> String  {
 	//clone word in case of not found
-	let word_org = word.clone();
+	let word_original = word.clone();
 
 	//get all candidates
-	let mut words = candidates(word, 2);
+	let mut words = candidates(word.clone(), 2);
 
 	//find out the most common words
 	let mut max = 0;
@@ -198,10 +203,54 @@ fn correction(word: String, dicts: HashMap<String, u32>) -> String  {
 		}
 	}
 
-	//assign to original word
-	if word_max == "" {
-		word_max = word_org;
-	}
+    let candidates_grade = grade(words, dicts, word.clone());
+
+    word_max = top_grade(candidates_grade);
 
 	word_max
+}
+
+
+//grade system for the correction
+fn grade(words: Vec<String>, dicts: HashMap<String, u32>, word_original: String) -> HashMap<String, u32> {
+    let mut candidates_grade = HashMap::new();
+
+    for x in words.iter() {
+        let mut grade = 0;
+
+        let y = dicts.get(&x.to_string());
+        if y != None{
+            let z = y.unwrap();
+            grade = *z;
+
+            if x.eq(&word_original) {
+                grade += 2000;
+            }
+        } else {
+            grade = 0;
+        }
+
+        let word = x.clone();
+
+        if grade > 0 {
+            candidates_grade.insert(word, grade);
+        }
+    }
+
+    return candidates_grade;
+}
+
+//find out the top grade word
+fn top_grade(candidates_grade: HashMap<String, u32>) -> String {
+    let mut max = 0;
+    let mut max_string = String::new();
+
+    for (x, y) in &candidates_grade {
+        if *y > max {
+            max = *y;
+            max_string = x.clone();
+        }
+    }
+
+    max_string
 }
