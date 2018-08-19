@@ -30,6 +30,7 @@ pub fn candidates(word: String, dim: u8) -> Vec<String>{
 	words
 }
 
+//change a word from add, delete, swap, and replace
 fn edit(word: String) -> Vec<String> {
     let letters = "abcdefghijklmnopqrstuvwxyz";
 
@@ -113,7 +114,6 @@ fn edit(word: String) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
-	// use std::collections::HashMap;
 	use super::{candidates, edit};
 
     #[test]
