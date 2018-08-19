@@ -68,3 +68,54 @@ fn top_grade(candidates_grade: HashMap<String, u32>) -> String {
 
     max_string
 }
+
+#[cfg(test)]
+mod tests {
+	use std::collections::HashMap;
+	use super::{correction, grade, top_grade};
+
+    #[test]
+    fn correction_test() {
+    	let mut test_dicts = HashMap::new();
+    	test_dicts.insert("this".to_string(), 10);
+    	test_dicts.insert("file".to_string(), 2);
+    	test_dicts.insert("is".to_string(), 1);
+    	test_dicts.insert("a".to_string(), 1);
+    	test_dicts.insert("test".to_string(), 1);
+
+        assert_eq!(correction("thi".to_string(), test_dicts), "this");
+    }
+
+    #[test]
+    fn grade_test() {
+    	let mut test_dicts = HashMap::new();
+    	test_dicts.insert("this".to_string(), 10);
+    	test_dicts.insert("file".to_string(), 2);
+    	test_dicts.insert("is".to_string(), 1);
+    	test_dicts.insert("a".to_string(), 1);
+    	test_dicts.insert("test".to_string(), 1);
+
+    	let mut test_words = Vec::new();
+    	test_words.push("thi".to_string());
+    	test_words.push("thb".to_string());
+    	test_words.push("tha".to_string());
+    	test_words.push("this".to_string());
+
+    	let word_original = "thi".to_string();
+
+    	let mut test_grade = HashMap::new();
+    	test_grade.insert("this".to_string(), 10);
+    	test_grade.insert("thi".to_string(), 1);
+
+    	assert_eq!(grade(test_words, test_dicts, word_original), test_grade);
+    }
+
+    #[test]
+    fn top_grade_test() {
+    	let mut test_grade = HashMap::new();
+    	test_grade.insert("this".to_string(), 10);
+    	test_grade.insert("thi".to_string(), 1);
+
+    	assert_eq!(top_grade(test_grade), "this");
+    }
+}

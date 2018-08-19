@@ -110,3 +110,31 @@ fn edit(word: String) -> Vec<String> {
 
     words
 }
+
+#[cfg(test)]
+mod tests {
+	// use std::collections::HashMap;
+	use super::{candidates, edit};
+
+    #[test]
+    fn candidates_test() {
+    	let test_candidates = vec!["", "a", "aa", "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj",
+    	 "ak", "al", "am", "an", "ao", "ap", "aq", "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az",
+    	  "b", "ba", "c", "ca", "d", "da", "e", "ea", "f", "fa", "g", "ga", "h", "ha", "i", "ia", "j", 
+    	  "ja", "k", "ka", "l", "la", "m", "ma", "n", "na", "o", "oa", "p", "pa", "q", "qa", "r", "ra", 
+    	  "s", "sa", "t", "ta", "u", "ua", "v", "va", "w", "wa", "x", "xa", "y", "ya", "z", "za"];
+
+        assert_eq!(candidates("a".to_string(), 1), test_candidates);
+    }
+
+    #[test]
+    fn edit_test() {
+    	let test_edit = vec!["aa", "ba", "ca", "da", "ea", "fa", "ga", "ha", "ia", "ja", "ka", "la",
+    	 "ma", "na", "oa", "pa", "qa", "ra", "sa", "ta", "ua", "va", "wa", "xa", "ya", "za", "", "aa", 
+    	 "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq", 
+    	 "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az", "a", "b", "c", "d", "e", "f", "g", "h", 
+    	 "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+
+        assert_eq!(edit("a".to_string()), test_edit);
+    }
+}

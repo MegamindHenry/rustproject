@@ -28,3 +28,21 @@ pub fn dicts(filename: &str) -> Result<HashMap<String, u32>> {
 
     Ok(map)
 }
+
+#[cfg(test)]
+mod tests {
+	use std::collections::HashMap;
+	use super::dicts;
+
+    #[test]
+    fn dicts_test() {
+    	let mut test_map = HashMap::new();
+    	test_map.insert("this".to_string(), 1);
+    	test_map.insert("file".to_string(), 2);
+    	test_map.insert("is".to_string(), 1);
+    	test_map.insert("a".to_string(), 1);
+    	test_map.insert("test".to_string(), 1);
+
+        assert_eq!(dicts("test.txt").unwrap(), test_map);
+    }
+}
