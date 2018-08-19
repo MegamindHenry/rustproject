@@ -5,29 +5,29 @@
 // Honor Code:  I pledge that this program represents my own work.
 
 //do the edit as dim as times
-pub fn candidates(word: String, dim: u8) -> Vec<String>{
-	// let mut words = Vec::new();
-	let word_original = word.clone();
+pub fn candidates(word: String, dim: u8) -> Vec<String> {
+    // let mut words = Vec::new();
+    let word_original = word.clone();
 
-	//initialize the words
-	let mut words = edit(word);
+    //initialize the words
+    let mut words = edit(word);
 
-	//redo the edit function
-	for _ in 1..dim {
-		for x in words.clone().iter() {
-			let mut words_new = edit(x.to_string());
-			words.append(&mut words_new);
-		}
-	}
+    //redo the edit function
+    for _ in 1..dim {
+        for x in words.clone().iter() {
+            let mut words_new = edit(x.to_string());
+            words.append(&mut words_new);
+        }
+    }
 
-	words.push(word_original);
+    words.push(word_original);
 
     //delete duplicates
     words.sort();
 
     words.dedup();
 
-	words
+    words
 }
 
 //change a word from add, delete, swap, and replace
@@ -114,26 +114,32 @@ fn edit(word: String) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
-	use super::{candidates, edit};
+    use super::{candidates, edit};
 
     #[test]
     fn candidates_test() {
-    	let test_candidates = vec!["", "a", "aa", "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj",
-    	 "ak", "al", "am", "an", "ao", "ap", "aq", "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az",
-    	  "b", "ba", "c", "ca", "d", "da", "e", "ea", "f", "fa", "g", "ga", "h", "ha", "i", "ia", "j", 
-    	  "ja", "k", "ka", "l", "la", "m", "ma", "n", "na", "o", "oa", "p", "pa", "q", "qa", "r", "ra", 
-    	  "s", "sa", "t", "ta", "u", "ua", "v", "va", "w", "wa", "x", "xa", "y", "ya", "z", "za"];
+        let test_candidates = vec![
+            "", "a", "aa", "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am",
+            "an", "ao", "ap", "aq", "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az", "b",
+            "ba", "c", "ca", "d", "da", "e", "ea", "f", "fa", "g", "ga", "h", "ha", "i", "ia", "j",
+            "ja", "k", "ka", "l", "la", "m", "ma", "n", "na", "o", "oa", "p", "pa", "q", "qa", "r",
+            "ra", "s", "sa", "t", "ta", "u", "ua", "v", "va", "w", "wa", "x", "xa", "y", "ya", "z",
+            "za",
+        ];
 
         assert_eq!(candidates("a".to_string(), 1), test_candidates);
     }
 
     #[test]
     fn edit_test() {
-    	let test_edit = vec!["aa", "ba", "ca", "da", "ea", "fa", "ga", "ha", "ia", "ja", "ka", "la",
-    	 "ma", "na", "oa", "pa", "qa", "ra", "sa", "ta", "ua", "va", "wa", "xa", "ya", "za", "", "aa", 
-    	 "ab", "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq", 
-    	 "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az", "a", "b", "c", "d", "e", "f", "g", "h", 
-    	 "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+        let test_edit = vec![
+            "aa", "ba", "ca", "da", "ea", "fa", "ga", "ha", "ia", "ja", "ka", "la", "ma", "na",
+            "oa", "pa", "qa", "ra", "sa", "ta", "ua", "va", "wa", "xa", "ya", "za", "", "aa", "ab",
+            "ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap",
+            "aq", "ar", "as", "at", "au", "av", "aw", "ax", "ay", "az", "a", "b", "c", "d", "e",
+            "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
+            "w", "x", "y", "z",
+        ];
 
         assert_eq!(edit("a".to_string()), test_edit);
     }

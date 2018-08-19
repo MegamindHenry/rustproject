@@ -3,10 +3,11 @@
 // Author:      Xuefeng Luo
 //
 // Honor Code:  I pledge that this program represents my own work.
+extern crate difference;
 extern crate time;
 
+use std::io::{stdin, stdout, Write};
 use time::PreciseTime;
-use std::io::{stdin,stdout,Write};
 
 //read file and form dict
 mod read;
@@ -20,19 +21,18 @@ mod grade;
 use grade::correction;
 
 fn main() {
-    loop{
+    loop {
+        let s = menu();
 
-       	let s = menu();
+        let start = PreciseTime::now();
 
-       	let start = PreciseTime::now();
-
-        let filename = "foo.txt";
+        let filename = "big.txt";
 
         let dict = dicts(filename).unwrap();
 
         let correction = correction(s, dict);
 
-        println!("Correction: {}",correction);
+        println!("Correction: {}", correction);
 
         let end = PreciseTime::now();
 
@@ -43,14 +43,16 @@ fn main() {
 //print menu
 //from: https://users.rust-lang.org/t/how-to-get-user-input/5176/2
 fn menu() -> String {
-	let mut s=String::new();
+    let mut s = String::new();
     print!("Word(Ctrl+C to exit): ");
-    let _=stdout().flush();
-    stdin().read_line(&mut s).expect("Did not enter a correct string");
-    if let Some('\n')=s.chars().next_back() {
+    let _ = stdout().flush();
+    stdin()
+        .read_line(&mut s)
+        .expect("Did not enter a correct string");
+    if let Some('\n') = s.chars().next_back() {
         s.pop();
     }
-    if let Some('\r')=s.chars().next_back() {
+    if let Some('\r') = s.chars().next_back() {
         s.pop();
     }
 
